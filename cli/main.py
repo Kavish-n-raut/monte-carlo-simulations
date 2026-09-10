@@ -1,5 +1,15 @@
 import argparse
+import sys
+from pathlib import Path
+
+# Allow `python cli/main.py` in addition to `python -m cli.main` by putting the
+# project root on the import path.
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
 import numpy as np
+
 from data.fetcher import fetch_prices
 from data.processor import log_returns, annualised_return, covariance_matrix
 from models.portfolio_sim import simulate_portfolio
