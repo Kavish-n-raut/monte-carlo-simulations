@@ -89,6 +89,18 @@ cache/                 cached price CSVs (git-ignored)
 outputs/               generated reports (git-ignored)
 ```
 
+## Testing
+
+```bash
+pip install -r requirements.txt
+pytest
+```
+
+The suite (`tests/`) runs offline against deterministic synthetic price data —
+no network calls — and covers the return/covariance math, simulation output
+shape and seed-determinism, the VaR / Expected Shortfall relationships, and the
+stress scenarios.
+
 ## Model assumptions & limitations
 
 The simulation uses **Geometric Brownian Motion**, which is a reasonable first
