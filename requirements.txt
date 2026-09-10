@@ -1,0 +1,10 @@
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+plotly>=5.22
+dash>=2.17
+dash-bootstrap-components>=1.6
+yfinance>=0.2
+openpyxl>=3.1
+pytest>=7.3
+pytest-cov>=4.0
