@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from dataclasses import dataclass
-from data.processor import log_returns, annualised_return, annualised_volatility, covariance_matrix, cholesky_decomposition
+from data.processor import log_returns, annualised_return, annualised_volatility, correlation_matrix
 
 @dataclass
 class SimulationResult:
@@ -9,6 +9,20 @@ class SimulationResult:
     final_values: np.ndarray
     pnl: np.ndarray
     asset_paths: np.ndarray
+
+
+def safe_cholesky(matrix: np.ndarray) -> np.ndarray:
+    """Lower-triangular Cholesky factor, with escalating jitter if the input
+    is only positive-semidefinite (not strictly positive-definite)."""
+    matrix = np.asarray(matrix, dtype=float)
+    eye = np.eye(matrix.shape[0])
+    jitter = 0.0
+    for _ in range(8):
+        try:
+            return np.linalg.cholesky(matrix + jitter * eye)
+        except np.linalg.LinAlgError:
+            jitter = max(jitter * 10, 1e-12)
+    raise np.linalg.LinAlgError("matrix is not positive-definite even with jitter")
 
 def simulate_portfolio(
     prices: pd.DataFrame,
@@ -24,9 +38,12 @@ def simulate_portfolio(
     returns = log_returns(prices)
     mu = annualised_return(returns).values
     sigma = annualised_volatility(returns).values
-    cov_mat = covariance_matrix(returns)
-    L = cholesky_decomposition(cov_mat)
-    
+    # Cholesky of the CORRELATION matrix produces unit-variance correlated
+    # shocks. Each asset's volatility is applied separately below via
+    # `sigma[i] * sqrt(dt)`; factoring the covariance here would double-count
+    # volatility (variance would scale with sigma**4 instead of sigma**2).
+    L = safe_cholesky(correlation_matrix(returns).values)
+
     n_assets = len(weights)
     n_steps = int(252 * T)
     dt = T / n_steps

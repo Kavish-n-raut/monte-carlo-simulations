@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from models.portfolio_sim import SimulationResult
-from data.processor import annualised_return, annualised_volatility, covariance_matrix, log_returns
+from models.portfolio_sim import SimulationResult, safe_cholesky
+from data.processor import annualised_return, annualised_volatility, correlation_matrix, log_returns
 
 def run_stress_tests(
     prices: pd.DataFrame,
@@ -11,12 +11,14 @@ def run_stress_tests(
     n_sims: int,
     scenarios: list[str] = ['crash', 'vol_shock', 'rate_shock', 'correlation_shock', 'recession']
 ) -> dict[str, SimulationResult]:
-    
+
     results = {}
     returns = log_returns(prices)
     base_mu = annualised_return(returns).values
     base_sigma = annualised_volatility(returns).values
-    base_cov = covariance_matrix(returns)
+    # Correlation (not covariance): sim_custom applies each asset's volatility
+    # via sigma[i]*sqrt(dt), so the Cholesky factor must be unit-variance.
+    base_corr = correlation_matrix(returns).values
     initial_prices = prices.iloc[-1].values
     
     def sim_custom(mu, sigma, L_matrix, time_horizon):
@@ -47,8 +49,8 @@ def run_stress_tests(
         mu = base_mu.copy()
         sigma = base_sigma.copy()
         horizon = T
-        L = np.linalg.cholesky(base_cov.values)
-        
+        L = safe_cholesky(base_corr)
+
         if scenario == 'crash':
             mu = mu - 0.30
             sigma = sigma * 2.0
@@ -57,11 +59,11 @@ def run_stress_tests(
         elif scenario == 'rate_shock':
             mu = mu - 0.10 # Assuming 200bps default
         elif scenario == 'correlation_shock':
+            # Crisis correlations converge; volatility is applied via sigma in
+            # sim_custom, so factor the stressed CORRELATION matrix directly.
             stressed_corr = np.full((len(weights), len(weights)), 0.90)
             np.fill_diagonal(stressed_corr, 1.0)
-            D = np.diag(sigma)
-            stressed_cov = D @ stressed_corr @ D
-            L = np.linalg.cholesky(stressed_cov)
+            L = safe_cholesky(stressed_corr)
         elif scenario == 'recession':
             mu = mu - 0.20
             sigma = sigma * 1.5
