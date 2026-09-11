@@ -1,9 +1,13 @@
 # Monte Carlo Portfolio Risk Engine
 
+[![Live demo](https://img.shields.io/badge/live%20demo-onrender.com-46a758.svg)](https://monte-carlo-risk-engine-ygob.onrender.com)
 [![CI](https://github.com/Kavish-n-raut/monte-carlo-simulations/actions/workflows/ci.yml/badge.svg)](https://github.com/Kavish-n-raut/monte-carlo-simulations/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Dash](https://img.shields.io/badge/dashboard-Dash%20%2F%20Plotly-2dd4bf.svg)](https://dash.plotly.com/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+**Live demo:** <https://monte-carlo-risk-engine-ygob.onrender.com> *(free tier —
+the first load after idle takes ~30–60 s to wake).*
 
 A Python engine for portfolio-level market risk analytics: correlated
 Geometric Brownian Motion simulation, three Value-at-Risk methodologies,
