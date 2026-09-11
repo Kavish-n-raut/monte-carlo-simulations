@@ -6,6 +6,8 @@ Expected Shortfall, drawdown analysis, and predefined stress scenarios —
 exposed both as a CLI and an interactive [Dash](https://dash.plotly.com/)
 dashboard.
 
+![Monte Carlo risk dashboard](docs/dashboard.png)
+
 ## What it does
 
 1. Pulls historical adjusted-close prices for a set of tickers (`yfinance`,

@@ -96,6 +96,12 @@ app.index_string = """<!DOCTYPE html>
         [class*="dash-dropdown-option"][aria-selected="true"] {
             background-color: #375a7f !important; color: #fff !important;
         }
+        /* dcc.Slider numeric value box (Dash >= 3) */
+        .dash-slider-container input,
+        .dash-range-slider-input, .dash-slider-input {
+            background-color: #2b3035 !important; color: #e9ecef !important;
+            border: 1px solid #495057 !important; border-radius: 4px;
+        }
         .card { border-color: rgba(148,163,184,.18); }
         .dash-graph { min-height: 380px; }
     </style>
@@ -139,8 +145,7 @@ def control_panel() -> dbc.Card:
                 dbc.Label("Time horizon (years)"),
                 dcc.Slider(
                     id="horizon", min=0.25, max=5, step=0.25, value=1,
-                    marks={i: str(i) for i in range(1, 6)},
-                    tooltip={"placement": "bottom", "always_visible": False},
+                    marks={i: f"{i}y" for i in range(1, 6)},
                 ),
                 html.Br(),
                 dbc.Label("Monte Carlo paths"),
