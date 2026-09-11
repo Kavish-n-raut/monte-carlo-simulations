@@ -6,8 +6,6 @@ Expected Shortfall, drawdown analysis, and predefined stress scenarios —
 exposed both as a CLI and an interactive [Dash](https://dash.plotly.com/)
 dashboard.
 
-![Monte Carlo risk dashboard](docs/dashboard.png)
-
 ## What it does
 
 1. Pulls historical adjusted-close prices for a set of tickers (`yfinance`,
@@ -26,6 +24,26 @@ dashboard.
 5. Re-runs the simulation under five stress scenarios (market crash, volatility
    shock, rate shock, correlation shock, recession).
 6. Renders interactive Plotly charts and exports an Excel report.
+
+## Dashboard
+
+`python app.py` serves an interactive dashboard at <http://127.0.0.1:8050>.
+Enter the tickers, investment, horizon, path count and history window in the
+sidebar, then press **Run risk simulation**.
+
+![Monte Carlo risk dashboard](docs/dashboard.png)
+
+| Panel | Shows |
+|---|---|
+| KPI tiles | Expected portfolio value, Monte Carlo VaR (95%), Expected Shortfall (95%), and maximum drawdown |
+| Simulated portfolio value paths | A fan of sample paths with the median and a 5–95% band, against the starting value |
+| Terminal P&L distribution | Histogram of simulated profit / loss with VaR 95% / 99% and CVaR markers |
+| Value-at-Risk by method | Monte Carlo vs Historical vs Parametric at 95% and 99%, as comparable loss amounts |
+| Asset return correlation | Correlation matrix of the portfolio's assets |
+| Stress scenarios *(optional toggle)* | Expected portfolio impact of the five predefined shocks |
+
+Every chart is Plotly, so hover, zoom and pan work. **Download Excel report**
+exports the summary, VaR comparison, and correlation matrix as an `.xlsx`.
 
 ## Requirements
 
@@ -48,11 +66,8 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Open <http://127.0.0.1:8050>. Set the tickers, investment, horizon, path count
-and history window in the sidebar, then **Run risk simulation**. The dashboard
-shows KPI tiles, a portfolio-path fan chart with a 5–95% band, the terminal
-P&L distribution with VaR / CVaR markers, a VaR-by-method comparison, the asset
-correlation matrix, an optional stress-scenario panel, and an Excel export.
+Then open <http://127.0.0.1:8050> — see [Dashboard](#dashboard) for what each
+panel shows.
 
 ### Command line
 
