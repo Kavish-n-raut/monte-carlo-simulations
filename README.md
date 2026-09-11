@@ -1,5 +1,10 @@
 # Monte Carlo Portfolio Risk Engine
 
+[![CI](https://github.com/Kavish-n-raut/monte-carlo-simulations/actions/workflows/ci.yml/badge.svg)](https://github.com/Kavish-n-raut/monte-carlo-simulations/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Dash](https://img.shields.io/badge/dashboard-Dash%20%2F%20Plotly-2dd4bf.svg)](https://dash.plotly.com/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A Python engine for portfolio-level market risk analytics: correlated
 Geometric Brownian Motion simulation, three Value-at-Risk methodologies,
 Expected Shortfall, drawdown analysis, and predefined stress scenarios —
