@@ -123,6 +123,27 @@ no network calls — and covers the return/covariance math, simulation output
 shape and seed-determinism, the VaR / Expected Shortfall relationships, and the
 stress scenarios.
 
+## Deployment
+
+The dashboard is a Flask/WSGI app (`app.py` exposes `server = app.server`) and
+ships with a [`render.yaml`](render.yaml) blueprint for one-click deployment to
+[Render](https://render.com/):
+
+1. Push to GitHub (already done).
+2. On Render: **New → Blueprint**, connect this repo — the blueprint provisions a
+   free web service that runs `gunicorn app:server`.
+3. Render builds from `requirements.txt` and serves the app at a public
+   `*.onrender.com` URL.
+
+To run the production server locally (Linux/macOS):
+
+```bash
+gunicorn app:server --bind 0.0.0.0:8050
+```
+
+> The free tier spins the service down after inactivity, so the first request
+> after idle takes ~30–60 s to wake.
+
 ## Model assumptions & limitations
 
 The simulation uses **Geometric Brownian Motion**, which is a reasonable first
